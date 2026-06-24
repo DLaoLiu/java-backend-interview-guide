@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="420" viewBox="0 0 720 420" role="img" aria-labelledby="title desc">
+  <title id="title">Java backend interview knowledge flow</title>
+  <desc id="desc">A resume-driven learning flow from Java basics to projects and interview answers.</desc>
+  <rect width="720" height="420" rx="8" fill="#f8fbfc"/>
+  <g fill="none" stroke="#256f8f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M130 118h130"/>
+    <path d="M320 118h130"/>
+    <path d="M510 118v78"/>
+    <path d="M510 264v62H210v-62"/>
+    <path d="M260 264h-80"/>
+    <path d="M370 264h-80"/>
+    <path d="M480 264h-80"/>
+  </g>
+  <g font-family="Inter, Arial, sans-serif" text-anchor="middle">
+    <rect x="42" y="70" width="176" height="96" rx="8" fill="#e1f1f4" stroke="#9ccfdc"/>
+    <text x="130" y="107" font-size="20" font-weight="700" fill="#174b63">简历技术栈</text>
+    <text x="130" y="137" font-size="14" fill="#3d5f6d">Java / Spring / 数据</text>
+
+    <rect x="260" y="70" width="176" height="96" rx="8" fill="#edf7e5" stroke="#b7dba6"/>
+    <text x="348" y="107" font-size="20" font-weight="700" fill="#315d28">知识补强</text>
+    <text x="348" y="137" font-size="14" fill="#53684b">基础 / 并发 / JVM</text>
+
+    <rect x="478" y="70" width="176" height="96" rx="8" fill="#fff3d6" stroke="#e6c879"/>
+    <text x="566" y="107" font-size="20" font-weight="700" fill="#7a5317">项目追问</text>
+    <text x="566" y="137" font-size="14" fill="#756143">链路 / 性能 / 稳定性</text>
+
+    <rect x="70" y="216" width="160" height="96" rx="8" fill="#ffffff" stroke="#cbd5dc"/>
+    <text x="150" y="253" font-size="18" font-weight="700" fill="#263238">面试表达</text>
+    <text x="150" y="281" font-size="13" fill="#59636b">STAR + 指标 + 取舍</text>
+
+    <rect x="278" y="216" width="160" height="96" rx="8" fill="#ffffff" stroke="#cbd5dc"/>
+    <text x="358" y="253" font-size="18" font-weight="700" fill="#263238">相似案例</text>
+    <text x="358" y="281" font-size="13" fill="#59636b">用户行为洞察平台</text>
+
+    <rect x="486" y="216" width="160" height="96" rx="8" fill="#ffffff" stroke="#cbd5dc"/>
+    <text x="566" y="253" font-size="18" font-weight="700" fill="#263238">复习节奏</text>
+    <text x="566" y="281" font-size="13" fill="#59636b">30 天冲刺清单</text>
+  </g>
+</svg>
