@@ -1,65 +1,101 @@
-# Java 基础与并发
+# Java 基础、集合、并发与 JVM
 
-## 小白先会说的话
+> 本页按最新简历筛选高频题，答案基于 JavaGuide 相关章节重新组织为面试表达，不照搬原文。先背粗体结论，再理解后面的原因。
 
-Java 面试不是背名词，而是把“语言机制、集合、并发、JVM”讲成工程里的稳定性和性能问题。你的简历写了高级开发、性能优化和公共组件，所以面试官默认你能解释底层原理。
+来源：[Java 基础](https://javaguide.cn/java/basis/java-basic-questions-01.html)、[Java 集合](https://javaguide.cn/java/collection/java-collection-questions-01.html)、[Java 并发](https://javaguide.cn/java/concurrent/java-concurrent-questions-01.html)、[线程池](https://javaguide.cn/java/concurrent/java-thread-pool-summary.html)、[JVM](https://javaguide.cn/java/jvm/memory-area.html)
 
-## 必须掌握
+## 先掌握这 16 题
 
-### Java 基础
+### 1. 面向对象的封装、继承、多态分别解决什么问题？
 
-来源：[Java 基础上](https://javaguide.cn/java/basis/java-basic-questions-01.html)、[中](https://javaguide.cn/java/basis/java-basic-questions-02.html)、[下](https://javaguide.cn/java/basis/java-basic-questions-03.html)
+**回答：** 封装是隐藏内部实现，只暴露稳定接口；继承用于复用和表达“is-a”关系，但会增加耦合；多态让调用方依赖抽象，在运行时选择具体实现。实际设计中我更倾向接口加组合，只有关系稳定、确实满足里氏替换时才使用继承。
 
-- 面向对象：封装、继承、多态分别解决什么问题。
-- equals 和 hashCode：为什么重写 equals 必须重写 hashCode。
-- String、StringBuilder、StringBuffer：不可变、线程安全、性能差异。
-- 异常：受检异常、运行时异常、全局异常处理。
-- 反射、注解、代理：和 Spring AOP、自定义 Starter 直接相关。
+**项目落点：** Chat-BFI 可以把 Schema 检索、SQL 校验、数据查询定义成统一 Tool 接口；BFI 不同数据源也可以用策略实现隔离变化。
 
-### 集合
+### 2. `equals()` 和 `hashCode()` 有什么关系？
 
-来源：[Java 集合上](https://javaguide.cn/java/collection/java-collection-questions-01.html)、[Java 集合下](https://javaguide.cn/java/collection/java-collection-questions-02.html)
+**回答：** `equals()` 相等的对象必须返回相同的 `hashCode()`，否则放入 HashMap 或 HashSet 后可能落到不同桶中，导致查找和去重异常。`hashCode()` 相同不代表对象一定相等，因为哈希冲突允许存在。参与比较的字段应尽量稳定，作为 Map key 后再修改会造成定位失败。
 
-- ArrayList 和 LinkedList：查询、插入、扩容和真实使用场景。
-- HashMap：数组、链表、红黑树、扰动函数、扩容、线程不安全。
-- ConcurrentHashMap：为什么适合并发读写。
-- BlockingQueue：和线程池任务队列、异步日志落库相关。
+**常见追问：** 为什么只重写 `hashCode()` 也不行？因为同桶内最终仍要通过 `equals()` 判断是否为同一个 key。
 
-### 并发
+### 3. String 为什么设计成不可变？
 
-来源：[Java 并发上](https://javaguide.cn/java/concurrent/java-concurrent-questions-01.html)、[Java 线程池详解](https://javaguide.cn/java/concurrent/java-thread-pool-summary.html)、[AQS](https://javaguide.cn/java/concurrent/aqs.html)
+**回答：** String 创建后内部值不能改变，这使它天然适合共享和缓存，线程之间读取更安全，也能保证哈希值稳定，适合作为 Map key。字符串常量池和类加载、安全参数等场景也依赖这种稳定性。大量循环拼接使用 `StringBuilder`；需要跨线程共享并修改时才考虑同步方案，通常不直接选 `StringBuffer`。
 
-- 线程和进程区别，线程状态切换。
-- synchronized、ReentrantLock、volatile、CAS 的区别。
-- 线程池核心参数：corePoolSize、maximumPoolSize、workQueue、拒绝策略。
-- ThreadLocal 使用场景和内存泄漏风险。
-- CompletableFuture：多个接口并发调用、聚合结果、超时处理。
+### 4. 受检异常和运行时异常怎么处理？
 
-### JVM
+**回答：** 受检异常要求编译期处理，适合调用方有能力恢复的外部问题；运行时异常通常表示参数、状态或程序逻辑错误。项目中不会捕获 `Exception` 后静默吞掉，而是保留根因、转换成明确的业务错误码，在统一异常处理器中返回，日志中通过 requestId 关联链路。
 
-来源：[Java 内存区域](https://javaguide.cn/java/jvm/memory-area.html)、[JVM 垃圾回收](https://javaguide.cn/java/jvm/jvm-garbage-collection.html)、[JDK 监控工具](https://javaguide.cn/java/jvm/jdk-monitoring-and-troubleshooting-tools.html)
+**项目落点：** Text2SQL 要把数据库错误分成可修复的语法或字段错误、可重试的瞬时错误，以及安全拒绝等不可重试错误。
 
-- JVM 内存区域：堆、栈、方法区、程序计数器、本地方法栈。
-- 对象创建、对象内存布局、对象访问定位。
-- GC Roots、可达性分析、常见垃圾收集器。
-- 线上排查：CPU 飙高、内存泄漏、频繁 Full GC。
+### 5. ArrayList 和 LinkedList 怎么选？
 
-## 简历项目怎么关联
+**回答：** ArrayList 底层是连续数组，随机访问快、缓存局部性好，尾部追加均摊复杂度低；中间插入删除需要移动元素。LinkedList 是双向链表，按下标访问必须遍历，而且每个节点额外保存指针。实际业务绝大多数情况优先 ArrayList，不能只因为“有插入删除”就选择 LinkedList，还要看是否已经定位到节点以及真实访问模式。
 
-| 项目 | 追问角度 | 你要准备的回答 |
-| --- | --- | --- |
-| 通用日志监控平台 | AOP、自定义注解、异步写日志 | 注解标记方法，AOP 获取上下文，异步队列削峰，失败重试或降级。 |
-| 用户行为分析平台 | 多线程、批量处理、缓存 | 批量导入和统计任务用线程池隔离，避免阻塞接口线程。 |
-| 多端服务打标管理平台 | API 调用并发和超时 | 大模型接口调用要做超时、重试、限流、幂等和人工校正。 |
+### 6. HashMap 的底层结构和 put 流程是什么？
 
-## 回答模板
+**回答：** JDK 8 的 HashMap 是数组加链表或红黑树。put 时先计算扰动后的 hash，再根据数组长度定位桶；桶为空直接插入，存在相同 key 则覆盖，否则追加到链表或树。链表达到阈值 8 且数组长度至少 64 时才树化，否则优先扩容；元素超过容量乘负载因子后扩容为原来的两倍。
 
-> 这个问题我会从原理和项目使用两层看。原理上，XXX 主要解决 YYY；在项目里，我用它处理 ZZZ 场景。它的风险是 AAA，所以我做了 BBB，比如超时、限流、异步、批量或监控。
+**常见追问：** 为什么容量通常是 2 的幂？这样可以用 `(n - 1) & hash` 高效定位，扩容后元素只需要判断原容量对应位是 0 还是 1。
 
-## 自测题
+### 7. HashMap 为什么线程不安全？ConcurrentHashMap 如何改进？
 
-- HashMap 为什么线程不安全？ConcurrentHashMap 怎么降低锁粒度？
-- 线程池为什么不建议使用 Executors 默认工厂方法？
-- volatile 能不能保证原子性？为什么？
-- 如果线上服务 CPU 打满，你会怎么定位？
-- Spring AOP 为什么通常基于代理？自调用为什么可能失效？
+**回答：** HashMap 的 put、扩容和链表修改没有并发保护，可能出现覆盖、数据丢失和读取不一致。JDK 8 的 ConcurrentHashMap 使用 CAS 完成空桶初始化，桶冲突时对桶头加 `synchronized`，读操作尽量无锁，锁粒度比给整个 Map 加锁小。它保证单次方法线程安全，但“先判断再更新”这种组合操作仍应使用 `compute`、`putIfAbsent` 等原子方法。
+
+### 8. `synchronized`、ReentrantLock、volatile 分别解决什么问题？
+
+**回答：** `synchronized` 和 ReentrantLock 都能实现互斥与可见性；`synchronized` 语法简单且自动释放锁，ReentrantLock 支持可中断、超时、公平锁和多个 Condition。`volatile` 只保证可见性和一定的有序性，不保证 `i++` 这类复合操作原子性，适合状态标记或单写多读场景。
+
+### 9. CAS 是什么？有什么问题？
+
+**回答：** CAS 比较内存中的旧值是否仍等于预期值，相等才原子更新，常用于低冲突下的无锁操作。问题包括高竞争时自旋消耗 CPU、只能直接处理单个变量，以及 ABA。ABA 可以通过版本号解决，例如 `AtomicStampedReference`；高竞争计数可以考虑 `LongAdder` 分散热点。
+
+### 10. 线程池七个核心参数怎么理解？
+
+**回答：** 线程池主要看核心线程数、最大线程数、空闲存活时间、时间单位、任务队列、线程工厂和拒绝策略。提交任务时先创建核心线程，核心线程满后入队，队列满后再扩到最大线程，仍无法处理才拒绝。参数要根据任务耗时、CPU/IO 比例、下游容量和可接受队列等待时间压测确定，不能机械套公式。
+
+**项目落点：** 日志发送、大模型调用和批量数据处理应使用隔离线程池，队列必须有界，避免某类慢任务拖垮整个服务。
+
+### 11. 为什么不建议直接使用 Executors 创建线程池？
+
+**回答：** 某些工厂方法使用无界队列，任务持续堆积可能 OOM；`newCachedThreadPool` 的最大线程数非常大，可能创建过多线程。生产中应显式使用 ThreadPoolExecutor，写清线程数、有界队列、线程名称、拒绝策略和监控指标。
+
+### 12. ThreadLocal 为什么可能内存泄漏？
+
+**回答：** ThreadLocalMap 的 key 是弱引用，但 value 是强引用。在线程池的长生命周期线程中，如果 key 被回收而没有调用 `remove()`，value 仍可能留在线程本地 Map 中。正确方式是 `try/finally` 清理，并避免在线程上下文中存放大型对象。
+
+**项目落点：** requestId、用户和租户上下文可以使用 ThreadLocal，但异步任务需要显式传递或使用受控上下文包装，不能假设自动继承。
+
+### 13. CompletableFuture 使用时有哪些坑？
+
+**回答：** 它适合并行调用多个独立接口并聚合结果，但要明确执行线程池，避免重任务占用公共 ForkJoinPool；每个依赖都要有超时、异常转换和降级。并行数量还必须受下游容量约束，并行不是越多越快。
+
+### 14. JVM 运行时数据区有哪些？
+
+**回答：** 线程私有的有程序计数器、虚拟机栈和本地方法栈；线程共享的主要是堆和方法区，HotSpot 中方法区由元空间实现。对象通常在堆上，栈帧保存局部变量、操作数栈和返回信息；类元数据主要进入元空间。直接内存不属于 JVM 规范中的运行时数据区，但 NIO 使用不当也可能 OOM。
+
+### 15. JVM 如何判断对象可以回收？
+
+**回答：** 主流 JVM 使用可达性分析，从 GC Roots 出发，无法到达的对象才进入回收判断。常见 Roots 包括线程栈中的引用、静态字段、JNI 引用等。引用计数无法解决循环引用，所以不能作为 Java GC 的主要判断方式。
+
+### 16. 线上 CPU 100% 或频繁 Full GC 怎么排查？
+
+**回答：** CPU 高先用 `top` 找进程和线程，再把线程 ID 转成十六进制，用 `jstack` 对应线程栈，区分死循环、锁竞争、频繁 GC 或外部调用。频繁 Full GC 要看 GC 日志、堆使用趋势、对象晋升、元空间和大对象，再用 `jmap`/heap dump 配合 MAT 分析引用链。先保留现场和止损，不能上来就重启或盲目调大堆。
+
+**项目表达：** 可以讲排查方法，但没有真实事故就不要说“线上就是这样解决的”；改成“如果遇到，我会按这个路径处理”。
+
+## 10 分钟速记
+
+- HashMap：数组 + 链表/红黑树；8、64、负载因子、2 倍扩容。
+- 并发：volatile 管可见性，锁管互斥，CAS 管原子更新。
+- 线程池：核心线程 → 队列 → 最大线程 → 拒绝；有界、隔离、监控。
+- JVM：先定位线程或内存证据，再分析根因，不靠猜参数。
+
+## 项目连接
+
+| 简历项目 | 优先连接的 Java 问题 |
+| --- | --- |
+| 通用日志监控平台 | 注解与代理、线程池隔离、ThreadLocal 上下文、异常降级 |
+| BFI 用户行为分析平台 | 批处理线程池、并发集合、CompletableFuture、JVM 排障 |
+| ServiceTag | 外部 API 并行调用、超时、异常处理、有界队列 |
+| Chat-BFI | Python 是主流程语言，但服务治理、并发隔离和故障处理原则与 Java 后端一致 |

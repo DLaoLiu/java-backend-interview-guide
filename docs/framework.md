@@ -1,64 +1,111 @@
-# Spring 与工程框架
+# Spring、MyBatis 与微服务工程
 
-## 你需要讲到什么程度
+> 对 6 年后端，框架题不能只背注解。回答要说明框架机制、失效边界以及你在日志组件、微服务和接口开发中的使用方式。
 
-你的简历中 Spring Boot、Spring Cloud、Nacos、Feign、MyBatis-Plus、自定义 Starter 都是核心关键词。面试时不能只说“我负责 CRUD”，要能讲清框架帮你解决了什么工程问题。
+来源：[Spring 面试题](https://javaguide.cn/system-design/framework/spring/spring-knowledge-and-questions-summary.html)、[IoC 与 AOP](https://javaguide.cn/system-design/framework/spring/ioc-and-aop.html)、[Spring Boot 自动装配](https://javaguide.cn/system-design/framework/spring/spring-boot-auto-assembly-principles.html)、[MyBatis 面试题](https://javaguide.cn/system-design/framework/mybatis/mybatis-interview.html)、[API 网关](https://javaguide.cn/distributed-system/api-gateway.html)
 
-## Spring / Spring Boot
+## Spring / Spring Boot 高频题
 
-来源：[Spring 面试题](https://javaguide.cn/system-design/framework/spring/spring-knowledge-and-questions-summary.html)、[SpringBoot 面试题](https://javaguide.cn/system-design/framework/spring/springboot-knowledge-and-questions-summary.html)、[IoC & AOP](https://javaguide.cn/system-design/framework/spring/ioc-and-aop.html)、[自动装配](https://javaguide.cn/system-design/framework/spring/spring-boot-auto-assembly-principles.html)
+### 1. 什么是 IoC 和 DI？
 
-### 必会知识
+**回答：** IoC 是把对象创建、依赖组装和生命周期交给容器，DI 是容器把依赖注入对象的具体方式。这样业务代码依赖接口而不是自己 `new` 实现，便于替换、测试和统一管理。构造器注入能保证依赖完整且更利于单元测试，我会优先使用。
 
-- IoC：对象创建和依赖管理交给容器。
-- AOP：把日志、权限、事务这类横切逻辑从业务代码里抽离。
-- Bean 生命周期：实例化、属性注入、初始化、销毁。
-- 自动装配：Starter 通过条件配置把公共能力接入应用。
-- Spring 事务：传播行为、隔离级别、失效场景。
+### 2. Spring Bean 的生命周期是什么？
 
-### 和你简历的连接
+**回答：** 容器先实例化 Bean，再填充属性，调用各种 Aware 回调；之后执行 BeanPostProcessor 的初始化前处理、`@PostConstruct` 或初始化方法，再执行初始化后处理，AOP 代理通常在这个阶段产生。容器关闭时执行 `@PreDestroy` 或销毁方法。面试重点不是死背顺序，而是理解扩展点和代理创建时机。
 
-通用日志监控平台写了自定义注解、AOP、log-starter。标准回答可以这样组织：
+### 3. Spring AOP 的原理是什么？
 
-1. 为什么做 Starter：多个系统都需要统一操作日志，复制代码维护成本高。
-2. Starter 做什么：提供注解、切面、配置属性、日志发送客户端。
-3. AOP 怎么工作：拦截标注注解的方法，记录用户、方法、参数、结果、耗时和异常。
-4. 可靠性怎么做：日志异步发送，失败落本地或重试，主业务不被日志服务拖垮。
+**回答：** Spring AOP 主要基于动态代理，在代理对象调用目标方法前后织入通知。目标实现接口时可使用 JDK 动态代理，没有接口时通常使用 CGLIB 创建子类代理。它适合日志、权限、事务和监控等横切逻辑，不适合把核心业务流程藏在切面里。
 
-## MyBatis / MyBatis-Plus
+**项目落点：** log-starter 通过自定义注解标记操作，切面采集用户、方法、耗时、结果和异常，再异步发送日志。
 
-来源：[MyBatis 常见面试题](https://javaguide.cn/system-design/framework/mybatis/mybatis-interview.html)
+### 4. 为什么同类方法自调用可能导致 AOP 和事务失效？
 
-- #{} 和 ${} 区别，SQL 注入风险。
-- 一级缓存、二级缓存。
-- 动态 SQL。
-- 分页、批量插入、逻辑删除。
-- N+1 查询问题和批量查询优化。
+**回答：** 外部调用经过 Spring 代理，代理才能执行切面或事务拦截；同一个对象内部用 `this` 调另一个方法时直接调用目标对象，没有经过代理。解决方式优先是拆分职责到另一个 Bean；也可以注入自身代理或使用 AspectJ，但不应为了绕过问题让设计更复杂。
 
-## Spring Cloud / 微服务
+### 5. Spring 事务常见失效场景有哪些？
 
-JavaGuide 主线可参考：[分布式高频题](https://javaguide.cn/distributed-system/distributed-system-interview-questions.html)、[API 网关](https://javaguide.cn/distributed-system/api-gateway.html)、[Spring Cloud Gateway](https://javaguide.cn/distributed-system/spring-cloud-gateway-questions.html)
+**回答：** 常见场景包括同类自调用、方法或类未被 Spring 管理、非 public 方法在常规代理模式下不生效、异常被捕获后未继续抛出、抛出的异常不在回滚规则中、手动新建对象，以及多数据源事务管理器选择错误。排查时要先确认是否经过代理、事务是否开启以及异常是否传播。
 
-你需要准备：
+### 6. 事务传播行为怎么理解？
 
-- 服务拆分：按业务边界拆，而不是按表拆。
-- 注册发现：服务上线下线后调用方如何找到服务。
-- 配置中心：不同环境配置隔离和动态刷新。
-- Feign 调用：超时、重试、降级、链路追踪。
-- 网关：认证、路由、限流、灰度。
+**回答：** `REQUIRED` 是默认行为，有事务就加入，没有就新建；`REQUIRES_NEW` 会挂起外部事务并新建事务；`NESTED` 通常基于保存点实现嵌套回滚；`SUPPORTS` 有事务就加入，没有就非事务执行。不能只背名字，要根据“内外层是否一起成功、失败时影响范围”选择。
 
-## 工程化能力
+### 7. Spring 如何解决循环依赖？
 
-来源：[Docker 核心概念](https://javaguide.cn/tools/docker/docker-intro.html)、[Maven 核心概念](https://javaguide.cn/tools/maven/maven-core-concepts.html)、[Git 核心概念](https://javaguide.cn/tools/git/git-intro.html)
+**回答：** 对单例、属性注入的部分循环依赖，Spring 可以通过三级缓存提前暴露对象工厂，在需要时取得早期引用，并兼顾 AOP 代理。构造器循环依赖无法靠这种方式解决。工程上应优先重构职责或引入中间服务，而不是依赖容器帮忙兜底。
 
-- Maven：依赖管理、生命周期、插件、依赖冲突。
-- Docker：镜像、容器、Dockerfile、端口、挂载、环境变量。
-- CI/CD：代码提交后自动构建、测试、镜像发布、部署。
+### 8. Spring Boot 自动装配的大致流程是什么？
 
-## 自测题
+**回答：** `@SpringBootApplication` 组合了配置、组件扫描和自动配置能力。自动配置会加载候选配置类，再根据 `@ConditionalOnClass`、`@ConditionalOnMissingBean`、配置属性等条件决定是否创建 Bean。核心思想是“类路径存在、配置满足、用户没有自定义时提供默认实现”。
 
-- Spring 事务为什么会失效？同类方法内部调用为什么不生效？
-- @Autowired 和 @Resource 有什么区别？
-- Spring Boot 自动装配的大致流程是什么？
-- Feign 调用超时后应该重试吗？什么时候不能重试？
-- 自定义 Starter 最少需要包含哪些东西？
+### 9. 自定义 Starter 应该包含什么？
+
+**回答：** 至少包括配置属性类、自动配置类、条件装配、核心客户端或切面，以及自动配置注册文件；还应提供合理默认值、开关、异常降级、版本兼容和使用说明。Starter 只负责接入通用能力，不能强行侵入业务模型。
+
+**项目回答：**
+
+> 我们多个系统都需要操作审计，所以把注解、AOP 切面、上下文采集和 Feign 日志客户端封装成 log-starter。业务方引入依赖并配置服务地址即可使用。发送采用独立线程池，设置超时和降级，日志服务异常不能阻塞主业务；关键失败记录可进入本地缓冲或补偿流程。
+
+## MyBatis / MyBatis-Plus 高频题
+
+### 10. `#{}` 和 `${}` 有什么区别？
+
+**回答：** `#{}` 使用预编译参数占位，驱动负责类型转换，能避免值直接拼接造成的 SQL 注入；`${}` 是字符串替换，适合无法参数化的表名或排序字段，但必须来自白名单，不能直接使用用户输入。普通查询条件默认使用 `#{}`。
+
+### 11. MyBatis 一级缓存和二级缓存是什么？
+
+**回答：** 一级缓存默认是 SqlSession 级别，同一个会话、相同语句和参数可能复用结果，执行更新或提交等操作会清理。二级缓存是 Mapper 命名空间级别，需要显式配置，跨 SqlSession 使用。分布式和高一致性业务中二级缓存容易产生一致性和失效管理问题，通常更愿意使用可观测、可治理的 Redis 缓存。
+
+### 12. 什么是 N+1 查询？如何解决？
+
+**回答：** 先查一批主记录，再为每条记录单独查关联数据，就形成 1 次加 N 次查询，延迟和数据库压力会随数据量增长。可以一次 Join、批量 `IN` 查询后在内存组装，或按场景预聚合。选择时要注意一对多 Join 导致主记录重复和分页错误。
+
+### 13. MyBatis-Plus 带来了什么？有什么边界？
+
+**回答：** 它减少通用 CRUD、分页、条件构造和逻辑删除样板代码，提高开发效率。但复杂查询、执行计划、事务和索引问题不会因为使用框架自动解决；Wrapper 中动态字段也要白名单控制。SQL 性能最终仍以数据库实际执行为准。
+
+## Spring Cloud / 微服务高频题
+
+### 14. 微服务应该如何拆分？
+
+**回答：** 优先按业务能力和数据边界拆分，让服务具备较高内聚和独立演进能力，而不是按数据库表或技术层拆。还要考虑团队边界、调用频率、事务一致性和部署成本。过度拆分会增加网络调用、链路排障和数据一致性复杂度。
+
+### 15. Nacos 注册中心和配置中心分别解决什么问题？
+
+**回答：** 注册中心维护服务实例及健康状态，让调用方通过服务名发现可用实例；配置中心集中管理不同环境配置并支持动态更新。动态刷新要控制范围，数据库地址、线程池等配置并不是都适合无保护热更新；敏感配置还要加密和权限控制。
+
+### 16. Feign 调用失败后是否应该重试？
+
+**回答：** 先设置明确的连接、读取和整体超时，再按错误类型决定是否重试。查询和具备幂等键的操作可以对瞬时网络错误做有限退避重试；创建订单、提交任务等非幂等操作不能盲目重试。重试会放大下游压力，需要配合熔断、限流和调用链监控。
+
+### 17. API 网关的职责是什么？
+
+**回答：** 网关是统一入口，负责路由、认证鉴权、限流、灰度、协议处理和访问日志。通用能力放网关，业务权限和业务校验仍应由服务负责，不能把网关做成新的单体业务层。网关本身需要无状态扩展和高可用。
+
+### 18. 如何设计一个幂等接口？
+
+**回答：** 根据业务选择唯一请求号、数据库唯一约束、状态机或幂等记录。服务端先验证幂等键，再在事务中完成状态判断和写入；重复请求返回第一次处理结果或明确状态。幂等不能只靠前端禁用按钮，也不能把所有请求简单加分布式锁。
+
+## 工程化高频题
+
+### 19. Maven 依赖冲突怎么处理？
+
+**回答：** Maven 常按最短路径和声明顺序选择依赖版本。先用 `dependency:tree` 找到传递路径，再通过 `dependencyManagement` 统一版本或精确 `exclusion` 排除冲突。不能看到冲突就全局排除，要确认运行时需要哪个版本并做回归。
+
+### 20. Docker 和虚拟机有什么区别？
+
+**回答：** 容器共享宿主机内核，以进程隔离方式运行，启动快、镜像小；虚拟机包含完整 Guest OS，隔离更重。Docker 解决环境和交付一致性，但数据持久化、网络、安全和资源限制仍需显式设计。
+
+### 21. CI/CD 流程应该包含哪些质量门禁？
+
+**回答：** 典型流程是代码检查、单元测试、构建、依赖和镜像安全扫描、生成版本化镜像、部署测试环境、集成或冒烟测试，再通过审批或策略发布生产。生产发布要有健康检查、灰度和回滚，镜像使用不可变版本，不能始终依赖 `latest`。
+
+## 10 分钟速记
+
+- IoC 管对象，AOP 管横切逻辑，事务依赖代理。
+- 自动装配 = 候选配置 + 条件判断 + 默认 Bean。
+- MyBatis 的 `#{}` 参数化，`${}` 只能用于白名单标识符。
+- 微服务治理先有超时，再谈重试；重试必须考虑幂等和流量放大。
+- log-starter 是这部分最重要的项目故事，准备 1 分钟和 5 分钟两个版本。

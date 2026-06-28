@@ -11,38 +11,43 @@ export default defineConfig({
     logo: '/architecture-flow.svg',
     nav: [
       { text: '首页', link: '/' },
-      { text: '知识地图', link: '/knowledge-map' },
+      { text: '面试冲刺', link: '/quick-start' },
       { text: '项目案例', link: '/projects/case' },
-      { text: '面试问答', link: '/interview-qna' },
       { text: 'Agent 专题', link: '/agent-interview' },
-      { text: '复习计划', link: '/plan' }
+      { text: '7 天计划', link: '/plan' }
     ],
     sidebar: [
       {
-        text: '起步',
+        text: '快速开始',
         items: [
-          { text: '简历诊断', link: '/resume-map' },
+          { text: '面试冲刺首页', link: '/quick-start' },
+          { text: '最新简历诊断', link: '/resume-map' },
           { text: '知识地图', link: '/knowledge-map' },
-          { text: 'JavaGuide 来源', link: '/sources' }
+          { text: '7 天冲刺计划', link: '/plan' }
         ]
       },
       {
-        text: '核心知识',
+        text: 'P0 核心知识',
         items: [
-          { text: 'Java 基础与并发', link: '/java-core' },
-          { text: 'Spring 与工程框架', link: '/framework' },
-          { text: '数据库与缓存', link: '/data-storage' },
+          { text: 'Java、并发与 JVM', link: '/java-core' },
+          { text: 'Spring、MyBatis 与微服务', link: '/framework' },
+          { text: 'MySQL、Redis 与数据存储', link: '/data-storage' }
+        ]
+      },
+      {
+        text: 'P1 项目专题',
+        items: [
           { text: '分布式与性能', link: '/distributed-performance' },
-          { text: '大数据与 AI API', link: '/bigdata-ai' }
+          { text: 'Flink、Doris 与 AI 工程', link: '/bigdata-ai' },
+          { text: 'Text2SQL Agent', link: '/agent-interview' }
         ]
       },
       {
         text: '面试输出',
         items: [
           { text: '相似项目案例', link: '/projects/case' },
-          { text: '高频追问与回答模板', link: '/interview-qna' },
-          { text: 'Text2SQL Agent 面试题', link: '/agent-interview' },
-          { text: '30 天复习计划', link: '/plan' }
+          { text: '综合高频问答', link: '/interview-qna' },
+          { text: 'JavaGuide 来源', link: '/sources' }
         ]
       }
     ],
