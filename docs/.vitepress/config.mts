@@ -14,6 +14,7 @@ export default defineConfig({
       { text: '知识地图', link: '/knowledge-map' },
       { text: '项目案例', link: '/projects/case' },
       { text: '面试问答', link: '/interview-qna' },
+      { text: 'Agent 专题', link: '/agent-interview' },
       { text: '复习计划', link: '/plan' }
     ],
     sidebar: [
@@ -40,6 +41,7 @@ export default defineConfig({
         items: [
           { text: '相似项目案例', link: '/projects/case' },
           { text: '高频追问与回答模板', link: '/interview-qna' },
+          { text: 'Text2SQL Agent 面试题', link: '/agent-interview' },
           { text: '30 天复习计划', link: '/plan' }
         ]
       }
