@@ -12,8 +12,9 @@ export default defineConfig({
     nav: [
       { text: '首页', link: '/' },
       { text: '面试冲刺', link: '/quick-start' },
+      { text: '事故场景题', link: '/scenario-core' },
       { text: '项目案例', link: '/projects/case' },
-      { text: 'Agent 专题', link: '/agent-interview' },
+      { text: 'Agent 场景题', link: '/scenario-agent' },
       { text: '7 天计划', link: '/plan' }
     ],
     sidebar: [
@@ -27,7 +28,14 @@ export default defineConfig({
         ]
       },
       {
-        text: 'P0 核心知识',
+        text: '场景化主线',
+        items: [
+          { text: '核心知识事故分析', link: '/scenario-core' },
+          { text: 'Chat-BFI 事故分析', link: '/scenario-agent' }
+        ]
+      },
+      {
+        text: 'P0 原理参考库',
         items: [
           { text: 'Java、并发与 JVM', link: '/java-core' },
           { text: 'Spring、MyBatis 与微服务', link: '/framework' },
@@ -35,11 +43,11 @@ export default defineConfig({
         ]
       },
       {
-        text: 'P1 项目专题',
+        text: 'P1 深入参考',
         items: [
           { text: '分布式与性能', link: '/distributed-performance' },
           { text: 'Flink、Doris 与 AI 工程', link: '/bigdata-ai' },
-          { text: 'Text2SQL Agent', link: '/agent-interview' }
+          { text: 'Text2SQL Agent 完整题库', link: '/agent-interview' }
         ]
       },
       {

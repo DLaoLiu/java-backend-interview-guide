@@ -7,10 +7,10 @@
 ## 时间有限时，只走这条路线
 
 1. 先背下面的三个项目故事，每个准备 1 分钟和 5 分钟版本。
-2. 再看 [Java 核心](/java-core)、[Spring 工程](/framework)、[数据库缓存](/data-storage) 每页的“速记”。
-3. 每页挑 8 道最容易追问的问题，脱稿说一遍。
-4. 看 [分布式与性能](/distributed-performance) 的 Kafka 和高可用部分。
-5. 最后看 [Agent 专题](/agent-interview)，重点是 Text2SQL 流程、LangGraph、SQL 安全和会话记忆。
+2. 完成 [核心知识事故分析](/scenario-core) 的 25 个现场，先判断原因再看答案。
+3. 完成 [Chat-BFI 事故分析](/scenario-agent) 的 15 个现场，并画出错误定位链路。
+4. 不理解的原理再进入 [Java 核心](/java-core)、[Spring 工程](/framework)、[数据库缓存](/data-storage) 查阅。
+5. 最后用 [Agent 完整题库](/agent-interview) 查漏补缺，不要求一次背完。
 
 不要从第一篇开始顺序通读，也不要尝试一次记住所有细节。
 
@@ -28,7 +28,7 @@
 - 状态：当前上下文、历史会话、业务状态和 Checkpoint 的区别。
 - 观测：Langfuse 追踪模型、Token、延迟、Tool 和整条链路。
 
-详细答案：[Text2SQL Agent 面试题](/agent-interview)
+优先学习：[Chat-BFI 事故分析题](/scenario-agent)；完整参考：[Text2SQL Agent 面试题](/agent-interview)
 
 ### 2. BFI：体现数据链路与性能
 
@@ -41,7 +41,7 @@
 - Doris 的分区分桶、预计算和慢查询排查。
 - TB 级是数据规模，不要在没有压测证据时编造 TPS、延迟或优化比例。
 
-详细答案：[Flink、Doris 与 AI 工程](/bigdata-ai)
+优先学习：[核心知识事故分析题](/scenario-core)；完整参考：[Flink、Doris 与 AI 工程](/bigdata-ai)
 
 ### 3. 通用日志平台：体现 Spring 深度
 
@@ -54,7 +54,7 @@
 - 日志异步、线程池隔离、超时、降级和审计可靠性。
 - 为什么日志服务故障不能拖垮主业务。
 
-详细答案：[Spring、MyBatis 与微服务](/framework)
+优先学习：[核心知识事故分析题](/scenario-core)；完整参考：[Spring、MyBatis 与微服务](/framework)
 
 ## P0 最低通过线
 
@@ -71,12 +71,12 @@
 
 ## 一道题怎么说
 
-使用四句话，不要散讲：
+先把问题还原成一个会出故障的现场，再使用四句话：
 
-1. **结论：** 它是什么，解决什么问题。
-2. **原理：** 只讲 2–3 个关键机制。
-3. **边界：** 哪些场景会失效或有什么代价。
-4. **项目：** 在哪个项目如何使用；没实际做过就说设计方案。
+1. **现象：** 系统具体发生了什么。
+2. **原因：** 哪几个机制按顺序导致问题。
+3. **方案：** 如何止损、定位和长期修复。
+4. **表达：** 压缩成 60 秒，并连接真实项目。
 
 示例：
 

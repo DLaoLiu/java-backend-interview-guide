@@ -3,30 +3,30 @@ layout: home
 
 hero:
   name: Java 后端面试复习站
-  text: 7 天建立可表达的面试体系
-  tagline: 基于最新 Java 后端 + AI Agent 简历，收敛 P0 基础、BFI 数据链路和 Chat-BFI Agent 三条主线。
+  text: 从事故现场理解面试原理
+  tagline: 先用 40 个真实问题场景理解为什么，再用完整题库查漏补缺，避免机械背答案。
   image:
     src: /architecture-flow.svg
     alt: 面试复习知识流
   actions:
     - theme: brand
-      text: 开始面试冲刺
-      link: /quick-start
+      text: 开始核心事故题
+      link: /scenario-core
     - theme: alt
-      text: Chat-BFI Agent 专题
-      link: /agent-interview
+      text: Chat-BFI 事故题
+      link: /scenario-agent
 
 features:
-  - title: 112 道核心问答
-    details: Java、Spring、MySQL、Redis、Kafka、Flink 等问题均提供可直接口述的简明答案。
+  - title: 40 个事故场景
+    details: 从表面现象推导根因、处理方案、60 秒回答和记忆主线。
   - title: 三个主项目
     details: 聚焦 Chat-BFI、BFI 和通用日志平台，准备 1 分钟与 5 分钟表达。
-  - title: 7 天冲刺
-    details: 先守住 P0 基础，再补项目追问，不在低收益冷门知识上消耗时间。
+  - title: 257 道参考题
+    details: 理解场景后再按模块查漏补缺，不要求一次背完。
 ---
 
 ## 使用方式
 
-先看 [面试冲刺首页](/quick-start) 确认路线，再按 [7 天计划](/plan) 练习。基础薄弱时只看各核心页的“速记”和 P0 问题；项目面试重点看 [Chat-BFI Agent](/agent-interview) 与 [BFI 数据链路](/bigdata-ai)。
+先看 [核心知识事故分析](/scenario-core)，理解 HashMap、线程池、事务、缓存、Kafka 和 Flink 为什么出问题；再看 [Chat-BFI 事故分析](/scenario-agent)，掌握 Text2SQL 的错误定位和安全边界。
 
-每道题都按结论、原理、边界和项目组织。先脱稿说清 60 秒答案，再继续阅读 JavaGuide 原文补细节。
+每道场景题都按事故现场、表面现象、原因链、处理方案、60 秒回答和记忆主线组织。需要补充完整知识时，再进入侧边栏的原理参考库。

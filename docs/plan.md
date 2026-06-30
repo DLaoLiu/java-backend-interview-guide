@@ -12,42 +12,41 @@
 
 ## Day 2：Java、并发、JVM
 
-- 先看 [Java 核心](/java-core) 的 10 分钟速记。
-- 重点练 HashMap、ConcurrentHashMap、锁、volatile、线程池、ThreadLocal。
-- 练习 CPU 100% 和 Full GC 排查。
+- 先完成 [核心知识事故分析](/scenario-core) 的 Java、集合与并发场景。
+- 先看事故现场自行判断，再看原因链和处理方案。
+- 不理解的概念再查 [Java 核心](/java-core)。
 
 **必须产出：** 脱稿回答 Java 页前 16 题中的任意 10 题。
 
 ## Day 3：Spring 与日志 Starter
 
-- 重点练 IoC、Bean 生命周期、AOP、代理、自调用和事务失效。
-- 把自动装配和自定义 Starter 串成日志平台项目。
-- 补 MyBatis 参数绑定、缓存和 N+1。
+- 完成 [核心知识事故分析](/scenario-core) 的 Spring 场景。
+- 重点理解事务为什么失效、日志服务为什么拖慢业务、重试为什么放大故障。
+- 再用 [Spring 原理参考库](/framework) 补 IoC、Bean 生命周期和自动装配。
 
 **必须产出：** 5 分钟讲清 log-starter 的设计、调用链和故障降级。
 
 ## Day 4：MySQL 与 Redis
 
-- 重点练 B+Tree、联合索引、回表、EXPLAIN、MVCC、三种日志。
-- 准备一个慢 SQL 排查案例；没有真实案例时明确按方法题回答。
-- 重点练缓存一致性、穿透/击穿/雪崩、分布式锁。
+- 完成 [核心知识事故分析](/scenario-core) 的 MySQL 与 Redis 场景。
+- 重点理解索引为什么没有使用、深分页为什么慢、缓存为什么不一致。
+- 再用 [数据库原理参考库](/data-storage) 补 B+Tree、MVCC 和日志。
 
 **必须产出：** 画出慢 SQL 排查路径，脱稿回答数据库页至少 12 题。
 
 ## Day 5：Kafka、Flink、Doris
 
-- 用一张纸画出 BFI 数据链路。
-- 练 Kafka 不丢、不重、顺序、积压。
-- 练 Flink Watermark、Checkpoint、State、反压。
-- 练 Doris 分区分桶、预计算和慢查询。
+- 完成 [核心知识事故分析](/scenario-core) 的 Kafka、Flink 与 Doris 场景。
+- 用一张纸画出 BFI 数据链路和故障传播方向。
+- 再查 [数据工程参考库](/bigdata-ai) 补 Watermark、State 和分区分桶。
 
 **必须产出：** 5 分钟讲 BFI，能回答“为什么不用 MySQL”和“失败后如何恢复”。
 
 ## Day 6：Chat-BFI Agent
 
-- 只看 [Agent 专题](/agent-interview) 的 Text2SQL、LangGraph、SQL 安全、会话记忆和项目高频题。
-- 画出完整 Graph，标出分支、循环、Checkpoint 和人工确认。
-- 练习 SQL 能执行但结果错误的排查。
+- 完成 [Chat-BFI 事故分析](/scenario-agent) 的 15 个场景。
+- 画出完整 Graph，并在每个事故对应的节点标记错误原因。
+- 最后使用 [Agent 完整题库](/agent-interview) 查漏补缺。
 
 **必须产出：** 5 分钟讲 Chat-BFI，能回答至少 15 道 Agent 高频题。
 
