@@ -17,20 +17,20 @@
 
 ### 1 分钟版本
 
-> Chat-BFI 是面向 BFI 业务数据的对话式分析 Agent，让业务人员通过自然语言完成趋势和明细查询，并识别重点关注对象。
+> Chat-BFI 是公司内部开发的 BFI 对话式分析 Agent，目标是让业务人员通过自然语言完成多步骤数据查询。项目由一名前端和一名后端组成，我负责后端开发；后来因部门调整和整条业务线取消而没有上线。
 >
-> 我负责 FastAPI 接口和核心 Agent 流程，使用 LangChain 封装模型与工具，LangGraph 编排相关性判断、查询路由、Text2SQL、统计和结果返回；趋势与明细走不同分支。系统还区分当前上下文、历史会话和业务状态，通过 Checkpoint 支持恢复，在高风险或低置信度节点加入人工确认，并用 Langfuse 观测模型、Token、延迟和 Tool 链路。
+> 我使用 LangChain 封装模型和 Tool，用 LangGraph 固定编排相关性判断、输入规范化、Schema 召回、结构化任务规划、人工确认和逐步 SQL 执行。每一步生成一条 SQL，失败最多重试三次；步骤之间通过带过期管理的 Doris 逻辑 View 引用结果，State 和 Checkpoint 持久化到 PostgreSQL。
 >
-> 这个项目的重点不是调用模型，而是把 SQL 安全、错误修复、状态管理和业务规则做成受控流程。
+> 当前完成了 SQL 语法和趋势/明细特征校验，但完整 AST、权限、超时和执行计划检查仍属于后续演进，不能说成已实现。
 
 ### 5 分钟必须展开
 
-- 输入：问题、用户权限、会话状态。
-- 路由：业务相关性、趋势或明细、是否需要澄清。
-- 检索：Schema、字段、Join 和业务术语。
-- 执行：SQL 生成、AST、白名单、只读、Limit、超时、脱敏。
-- 分析：确定性统计和业务规则先计算，模型再解释。
-- 治理：ReAct 重试上限、Human-in-the-Loop、Checkpoint、Langfuse。
+- 输入：问题、历史消息和当前 Checkpoint State。
+- 检索：相关表字段召回，使用 `BAAI/bge-reranker-v2-m3` 重排。
+- 计划：模型输出固定 JSON，服务端校验后由用户确认或补充信息重规划。
+- 执行：每步生成一条 SQL，做语法及趋势/明细特征校验，异常最多重试三次。
+- 衔接：Doris 逻辑 View 保存查询定义，业务表登记过期时间，定时任务清理。
+- 边界：当前不是 ReAct；完整 SQL 安全防线和上下文压缩尚未完成。
 
 ### 最可能追问
 
@@ -40,23 +40,24 @@
 - 会话历史和 Checkpoint 有什么区别？
 - 风险人员由模型判断还是规则判断？
 
-完整答案：[Text2SQL Agent 专题](/agent-interview)
+真实项目答案：[Chat-BFI 项目问答](/projects/chat-bfi-interview)；原理参考：[Text2SQL Agent 专题](/agent-interview)
 
 ## BFI 用户行为分析平台（第二主项目）
 
 ### 1 分钟版本
 
-> BFI 面向网络流量和设备数据提供用户画像、智能筛选、碰撞分析和行为监控。数据来源包括实时流量、设备上报和 BCP 文件；实时数据通过 Kafka 接入，Flink 负责清洗、补字段和状态计算，Doris 保存明细及聚合数据，Elasticsearch 支持检索，Redis 缓存热点配置和结果。
+> BFI 已在成都和黑龙江落地，团队 6 人。平台每天处理约 20 亿条、每条 8 个字段的原始记录，数据保留半年，为业务提供用户画像、筛选、碰撞和布控分析。
 >
-> 我负责后端核心模块、实时数据处理相关能力和查询性能优化，重点处理多维筛选、数据分层、预计算以及大数据量下的查询响应。稳定性上关注 Kafka Lag、Flink Checkpoint 与反压、Doris 导入和幂等补偿。
+> 还原机解析报文后写入 Kafka，Flink 清洗并按业务分发到 Doris；画像任务再由 Flink 从 Doris 读取和计算，写入 Elasticsearch。我主要负责后端，也开发部分 Flink 任务。全量数据按周拆表、表内按天分区，布控数据按月拆表，并结合 IMSI 等字段的分桶与索引支撑查询。
 
 ### 5 分钟必须展开
 
 - 数据源和业务实体是什么。
 - 为什么 Kafka、Flink、Doris、ES 各自不可互相替代。
 - 用户画像、碰撞分析如何转成查询或计算。
-- 如何处理重复、乱序、任务失败和数据补偿。
-- Doris 查询如何通过分区、分桶和预计算优化。
+- Checkpoint 为什么不等于端到端不重。
+- 周表、月表、日分区、分桶和索引分别解决什么问题。
+- Flink OOM 如何从热点 Key 和全量窗口定位。
 
 ### 最可能追问
 
@@ -66,7 +67,7 @@
 - Doris 为什么比 MySQL 合适？
 - 做过哪一条真实的性能优化？
 
-详细答案：[Flink、Doris 与 AI 工程](/bigdata-ai)、[分布式与性能](/distributed-performance)
+真实项目答案：[BFI 项目问答](/projects/bfi-interview)；原理参考：[Flink、Doris 与 AI 工程](/bigdata-ai)、[分布式与性能](/distributed-performance)
 
 ## 通用日志监控平台（第三主项目）
 

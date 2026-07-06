@@ -13,7 +13,7 @@ export default defineConfig({
       { text: '首页', link: '/' },
       { text: '面试冲刺', link: '/quick-start' },
       { text: '事故场景题', link: '/scenario-core' },
-      { text: '项目案例', link: '/projects/case' },
+      { text: '项目面试实战', link: '/project-interview' },
       { text: 'Agent 场景题', link: '/scenario-agent' },
       { text: '7 天计划', link: '/plan' }
     ],
@@ -32,6 +32,15 @@ export default defineConfig({
         items: [
           { text: '核心知识事故分析', link: '/scenario-core' },
           { text: 'Chat-BFI 事故分析', link: '/scenario-agent' }
+        ]
+      },
+      {
+        text: '项目面试实战',
+        items: [
+          { text: '项目问答总览', link: '/project-interview' },
+          { text: 'Chat-BFI 项目问答', link: '/projects/chat-bfi-interview' },
+          { text: 'BFI 项目问答', link: '/projects/bfi-interview' },
+          { text: '项目表达手册', link: '/projects/case' }
         ]
       },
       {

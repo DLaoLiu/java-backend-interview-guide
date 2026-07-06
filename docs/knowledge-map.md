@@ -6,6 +6,7 @@
 
 - [核心知识事故分析](/scenario-core)：25 个 Java、Spring、数据库、Kafka/Flink 现场。
 - [Chat-BFI 事故分析](/scenario-agent)：15 个 Text2SQL、LangGraph、安全与评估现场。
+- [项目面试实战](/project-interview)：按真实经历整理 Chat-BFI 与 BFI 深挖问答。
 
 场景页用于理解和表达；下面的知识页用于不理解时补原理，不需要一次全部背完。
 
@@ -17,7 +18,7 @@
 | Spring / Spring Boot | 几乎所有 Java 项目使用 | 能讲代理、事务、自动装配和 Starter | [Spring 工程](/framework) |
 | MySQL / SQL | 明确写了 SQL 和索引优化 | 能完整讲一条慢 SQL 排查路径 | [数据库与缓存](/data-storage) |
 | Redis | 多个项目使用 | 能讲一致性、三类缓存问题和分布式锁 | [数据库与缓存](/data-storage) |
-| 三个主项目 | Chat-BFI、BFI、日志平台 | 各有 1 分钟和 5 分钟版本 | [项目表达](/projects/case) |
+| 三个主项目 | Chat-BFI、BFI、日志平台 | 各有 1 分钟和 5 分钟版本 | [项目面试实战](/project-interview) |
 
 ## P1：项目深挖
 

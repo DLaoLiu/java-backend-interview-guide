@@ -7,8 +7,8 @@
 ## 时间有限时，只走这条路线
 
 1. 先背下面的三个项目故事，每个准备 1 分钟和 5 分钟版本。
-2. 完成 [核心知识事故分析](/scenario-core) 的 25 个现场，先判断原因再看答案。
-3. 完成 [Chat-BFI 事故分析](/scenario-agent) 的 15 个现场，并画出错误定位链路。
+2. 先完成 [项目面试实战](/project-interview)，区分真实实现与演进方案。
+3. 完成 [核心知识事故分析](/scenario-core) 和 [Chat-BFI 事故分析](/scenario-agent)，先判断原因再看答案。
 4. 不理解的原理再进入 [Java 核心](/java-core)、[Spring 工程](/framework)、[数据库缓存](/data-storage) 查阅。
 5. 最后用 [Agent 完整题库](/agent-interview) 查漏补缺，不要求一次背完。
 
@@ -23,12 +23,12 @@
 **必须讲清：**
 
 - 为什么不是普通聊天：需要状态、工具、分支、循环、SQL 执行和人工确认。
-- LangGraph 节点：相关性 → 意图路由 → Schema Linking → SQL → 校验执行 → 统计解释。
-- 安全：只读账号、AST、白名单、行数、超时、脱敏。
-- 状态：当前上下文、历史会话、业务状态和 Checkpoint 的区别。
+- LangGraph 节点：相关性 → 输入规范化 → Schema 召回 → 计划确认 → 分步 SQL → 总结。
+- SQL 现状：语法和趋势/明细特征校验；AST、权限、超时和 `EXPLAIN` 是演进方案。
+- 状态：历史消息、当前 Message、Schema、计划、View 名称、重试次数和 Checkpoint。
 - 观测：Langfuse 追踪模型、Token、延迟、Tool 和整条链路。
 
-优先学习：[Chat-BFI 事故分析题](/scenario-agent)；完整参考：[Text2SQL Agent 面试题](/agent-interview)
+优先学习：[Chat-BFI 项目问答](/projects/chat-bfi-interview)；原理参考：[Text2SQL Agent 面试题](/agent-interview)
 
 ### 2. BFI：体现数据链路与性能
 
@@ -37,11 +37,11 @@
 **必须讲清：**
 
 - 为什么 Kafka → Flink → Doris，而不是全部放 MySQL。
-- Flink 的 Checkpoint、Watermark、状态、反压和端到端幂等。
-- Doris 的分区分桶、预计算和慢查询排查。
+- Flink 的 Checkpoint、脏数据、反压、热点 Key 和端到端幂等。
+- Doris 周表/月表、日分区、分桶、索引及跨周期查询取舍。
 - TB 级是数据规模，不要在没有压测证据时编造 TPS、延迟或优化比例。
 
-优先学习：[核心知识事故分析题](/scenario-core)；完整参考：[Flink、Doris 与 AI 工程](/bigdata-ai)
+优先学习：[BFI 项目问答](/projects/bfi-interview)；原理参考：[Flink、Doris 与 AI 工程](/bigdata-ai)
 
 ### 3. 通用日志平台：体现 Spring 深度
 

@@ -24,7 +24,7 @@
 | TB 级流量处理 | 数据量来源、吞吐、容错和一致性 | Kafka、Flink Checkpoint、幂等、Doris |
 | 微服务架构设计 | 服务如何拆、故障如何治理 | Nacos、Feign、超时重试、限流熔断 |
 | Text2SQL Agent | 是否只是调模型 API | Graph、Schema Linking、SQL 校验、评估 |
-| Human-in-the-Loop / ReAct | 在哪里循环、在哪里中断、怎么恢复 | 状态、条件边、重试上限、Checkpoint |
+| Human-in-the-Loop / 固定 Graph | 在哪里循环、在哪里中断、怎么恢复 | 计划确认、State、条件边、重试上限、Checkpoint |
 | Langfuse | 具体观测什么 | Trace、Span、Generation、Token、延迟、Tool |
 | 性能优化 | 是否有真实证据 | P95/P99、扫描量、资源、压测和回归 |
 
@@ -42,7 +42,7 @@
 >
 > 在 BFI 项目中，我负责后端核心模块和数据处理相关能力，接触了 Kafka、Flink、Doris 和 Elasticsearch，重点做过多维查询、数据分层和性能优化。近期参与 Chat-BFI Text2SQL Agent 开发，使用 FastAPI、LangChain 和 LangGraph 编排问题判断、查询路由、SQL 查询和统计分析，并通过 Langfuse 做链路观测。
 >
-> 我的优势是能够把 AI 能力放进可上线的后端系统中，关注状态管理、SQL 安全、超时重试、人工确认和可观测性，而不只是完成一次模型调用。
+> 我的优势是能够把 AI 能力放进受控的后端流程中，关注状态管理、有限重试、人工确认和可观测性，而不只是完成一次模型调用。Chat-BFI 尚未上线，完整 SQL 安全能力是后续演进方向。
 
 按真实经历删改，不要逐字背诵。
 
